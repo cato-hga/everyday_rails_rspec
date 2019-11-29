@@ -61,18 +61,47 @@ RSpec.describe ProjectsController, type: :controller do
     end
   end
 
+  describe "#new" do
+    context "as an authorized user" do
+      before do 
+        @user = FactoryBot.create(:user)
+        @project = FactoryBot.create(:project, owner: @user)
+      end
+
+      it "it responds successfully" do
+        sign_in @user
+        get :new, params: { id: @project.id }
+        expect(response).to be_success
+        #expect(assigns(:project)).to be_a_new(Project)
+      end
+    end
+  end
+
   describe "#create"do
     context "as an authenticated user" do
       before do
         @user = FactoryBot.create(:user)
       end
-      it "adds a project" do
-        project_params = FactoryBot.attributes_for(:project) 
-        sign_in @user
-        expect {
-          post :create, params: { project: project_params } 
-        }.to change(@user.projects, :count).by(1)
-      end 
+
+      context "with valid attributes" do
+        it "adds a project" do
+          project_params = FactoryBot.attributes_for(:project) 
+          sign_in @user
+          expect {
+            post :create, params: { project: project_params } 
+          }.to change(@user.projects, :count).by(1)
+        end
+      end
+
+      context "with invalid attributes" do
+        it "does not add a project" do
+          project_params = FactoryBot.attributes_for(:project, :invalid)
+          sign_in @user
+          expect {
+            post :create, params: { project: project_params }
+          }.to_not change(@user.projects, :count)
+        end
+      end
     end
     context "as a guest" do
       it "returns a 302 response" do

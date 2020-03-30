@@ -4,7 +4,6 @@ FactoryBot.define do
     description "A test project."
     due_on 1.week.from_now
     association :owner
-
     trait :with_notes do
       after(:create) { |project| create_list(:note, 5, project: project) }
     end

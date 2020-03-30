@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+
 RSpec.describe TasksController, type: :controller do
   before do
     @user = FactoryBot.create(:user)
@@ -37,6 +38,7 @@ RSpec.describe TasksController, type: :controller do
     it "requires authentication" do
       new_task = { name: "New test task" }
       # Don't sign in this time ...
+
       expect {
         post :create, format: :json,
           params: { project_id: @project.id, task: new_task }

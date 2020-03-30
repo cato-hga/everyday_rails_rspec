@@ -98,6 +98,7 @@ RSpec.describe ProjectsController, type: :controller do
 
       it "redirects to the sign-in page" do
         project_params = FactoryBot.attributes_for(:project)
+
         post :create, params: { project: project_params }
         expect(response).to redirect_to "/users/sign_in"
       end
@@ -141,6 +142,7 @@ RSpec.describe ProjectsController, type: :controller do
         project_params = FactoryBot.attributes_for(:project)
         sign_in @user
         patch :update, params: { id: @project.id, project: project_params }
+
         expect(response).to redirect_to root_path
       end
     end
@@ -170,7 +172,7 @@ RSpec.describe ProjectsController, type: :controller do
         @user = FactoryBot.create(:user)
         @project = FactoryBot.create(:project, owner: @user)
       end
-
+      
       it "deletes a project" do
         sign_in @user
         expect {
@@ -187,6 +189,7 @@ RSpec.describe ProjectsController, type: :controller do
       end
 
       it "does not delete the project" do
+
         sign_in @user
         expect {
           delete :destroy, params: { id: @project.id }

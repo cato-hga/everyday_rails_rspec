@@ -1,5 +1,6 @@
 require 'rails_helper'
-# I try to limit controller tests to making sure access control is wired up correctly. In the case of the tests we’ve created here, that means tests for unauthorized users and guests. 
+
+
 RSpec.describe TasksController, type: :controller do
   before do
     @user = FactoryBot.create(:user)
@@ -13,7 +14,7 @@ RSpec.describe TasksController, type: :controller do
       get :show, format: :json,
         params: { project_id: @project.id, id: @task.id }
       expect(response.content_type).to eq "application/json"
-    end  
+    end
   end
 
   describe "#create" do
@@ -36,6 +37,7 @@ RSpec.describe TasksController, type: :controller do
 
     it "requires authentication" do
       new_task = { name: "New test task" }
+      # Don't sign in this time ...
 
       expect {
         post :create, format: :json,
